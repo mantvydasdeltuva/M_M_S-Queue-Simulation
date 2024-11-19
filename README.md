@@ -126,8 +126,8 @@ This plot provides two separate graphs:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/mantvydasdeltuva/M_M_S-Queue-Simulation.git
-   cd M_M_S-Queue-Simulation
+   git clone https://github.com/mantvydasdeltuva/m_m_s-queue-simulation.git
+   cd m_m_s-queue-simulation
 2. Open the MATLAB script in the MATLAB editor.
 3. Modify the parameters (`lambda_range`, `mu`, `S`, `total_time`) if needed.
 4. Run the script to simulate and generate the visualizations.

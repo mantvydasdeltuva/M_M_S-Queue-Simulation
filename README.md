@@ -9,7 +9,7 @@
 
 This repository implements a simulation of an **M/M/S pure loss queueing model**, a fundamental model in queueing theory used to study systems with limited server capacity and no waiting queues. Calls that cannot be immediately served are lost.
 
-The M/M/s model is defined by:
+The M/M/S model is defined by:
 - **M** (Markovian Inter-Arrival Times): The time between successive arrivals follows an exponential distribution.
 - **M** (Markovian Service Times): The service times are exponentially distributed.
 - **S** (Finite Servers): A fixed number of servers are available to serve arriving calls.

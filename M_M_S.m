@@ -5,20 +5,20 @@ close all; % Close all open figure windows
 rng(11); % Random generator seed for reproducibility
 
 % Parameters
-lambda_range = 0.1:0.1:20; % Arrival rate (lambda calls per unit time)
+lambda = 10; % Arrival rate (lambda calls per unit time)
 mu = 2; % Service rate (mu calls per unit time)
-S = 10; % Number of servers
+S_range = 1:1:20; % Number of servers (range of them)
 total_time = 100; % Total time for the simulation (total unit time)
 
 % Storage
-loss_probabilities = zeros(size(lambda_range)); % All simulated loss probabilities
-theoretical_loss_probabilities = zeros(size(lambda_range)); % All theoretical loss probabilities
-utilization = zeros(size(lambda_range)); % All simulated server utilization rates
-theoretical_utilization = zeros(size(lambda_range)); % All theoretical server utilization rates
+loss_probabilities = zeros(size(S_range)); % All simulated loss probabilities
+theoretical_loss_probabilities = zeros(size(S_range)); % All theoretical loss probabilities
+utilization = zeros(size(S_range)); % All simulated server utilization rates
+theoretical_utilization = zeros(size(S_range)); % All theoretical server utilization rates
 
-% Simulations for different values of lambda
-for idx = 1:length(lambda_range)
-    lambda = lambda_range(idx);  % Current lambda value
+% Simulations for different values of S
+for idx = 1:length(S_range)
+    S = S_range(idx);  % Current S value
     
     % Storage
     time_in_system = []; % Unit time at specific event (index is event)
@@ -92,7 +92,7 @@ for idx = 1:length(lambda_range)
         calls_in_system(end + 1) = num_calls;
     end
 
-    % Simulated loss probability for this lambda
+    % Simulated loss probability for specific S value
     loss_probabilities(idx) = num_dropped_calls / num_offered_calls;
 
     % Theoretical loss probability using Erlang B formula
@@ -111,7 +111,7 @@ for idx = 1:length(lambda_range)
 
 
     % Only done for the last simulation
-    if idx == length(lambda_range)
+    if idx == length(S_range)
 
         % Weighted average number of calls in the system
         sum_calls = 0;
@@ -177,14 +177,14 @@ for idx = 1:length(lambda_range)
 end
 
 % Calculate trend line of simulated loss probability using cubic smoothing spline
-spline_fit = csaps(lambda_range, loss_probabilities, 0.05);
-fitted_loss_probabilities = fnval(spline_fit, lambda_range);
+spline_fit = csaps(S_range, loss_probabilities, 0.05);
+fitted_loss_probabilities = fnval(spline_fit, S_range);
 fitted_loss_probabilities = max(min(fitted_loss_probabilities, 1), 0);
 fitted_qos = 1 - fitted_loss_probabilities;
 
 % Calculate trend line of simulated utilization using cubic smoothing spline
-u_spline_fit = csaps(lambda_range, utilization, 0.05);
-fitted_utilization = fnval(u_spline_fit, lambda_range);
+u_spline_fit = csaps(S_range, utilization, 0.05);
+fitted_utilization = fnval(u_spline_fit, S_range);
 fitted_utilization = max(min(fitted_utilization, 1), 0);
 
 % Screen size for positioning
@@ -193,23 +193,23 @@ figure_width = screen_size(3) / 3;
 figure_height = screen_size(4) - 200;
 
 
-% Visualization: probability of loss vs lambda and server utilization vs lambda
+% Visualization: probability of loss vs capacity and server utilization vs capacity
 figure(3);
 set(gcf, 'Color', [0.15, 0.15, 0.15], 'Position', [figure_width, 100, figure_width, figure_height]);
 
-% Probability of loss vs lambda
+% Probability of loss vs capacity
 subplot(2, 1, 1);
-plot(lambda_range, loss_probabilities, 'o', 'MarkerSize', 3, 'LineWidth', 1, 'Color', [0.9, 0.6, 0.2]);
+plot(S_range, loss_probabilities, 'o', 'MarkerSize', 3, 'LineWidth', 1, 'Color', [0.9, 0.6, 0.2]);
 hold on;
 
-plot(lambda_range, fitted_loss_probabilities, 'r--', 'LineWidth', 2);
+plot(S_range, fitted_loss_probabilities, 'r--', 'LineWidth', 2);
  
-plot(lambda_range, theoretical_loss_probabilities, '--', 'LineWidth', 1, 'Color', [0.0, 1.0, 1.0]);
+plot(S_range, theoretical_loss_probabilities, '--', 'LineWidth', 1, 'Color', [0.0, 1.0, 1.0]);
 
-plot(lambda_range, fitted_qos, 'g--', 'LineWidth', 1);
+plot(S_range, fitted_qos, 'g--', 'LineWidth', 1);
 
-title('Probability of Loss in M/M/S System vs Arrival Rate (\lambda)', 'Color', 'w', 'FontSize', 14);
-xlabel('Arrival Rate (\lambda)', 'Color', 'w', 'FontSize', 12);
+title('Probability of Loss in M/M/S System vs Capacity (S)', 'Color', 'w', 'FontSize', 14);
+xlabel('Capacity (S)', 'Color', 'w', 'FontSize', 12);
 ylabel('Probability of Loss', 'Color', 'w', 'FontSize', 12);
 
 grid on;
@@ -220,17 +220,17 @@ legend({'Simulated Loss Probability', 'Trend of Simulated Loss Probability', 'Th
 ylim([0 1]);
 axis normal;
 
-% Server utilization vs lambda
+% Server utilization vs capacity
 subplot(2, 1, 2);
-plot(lambda_range, utilization * 100, 'o', 'MarkerSize', 3, 'LineWidth', 1, 'Color', [0.9, 0.6, 0.2]);
+plot(S_range, utilization * 100, 'o', 'MarkerSize', 3, 'LineWidth', 1, 'Color', [0.9, 0.6, 0.2]);
 hold on;
 
-plot(lambda_range, fitted_utilization * 100, 'r--', 'LineWidth', 2);
+plot(S_range, fitted_utilization * 100, 'r--', 'LineWidth', 2);
 
-plot(lambda_range, theoretical_utilization * 100, '--', 'LineWidth', 1, 'Color', [0.0, 1.0, 1.0]);
+plot(S_range, theoretical_utilization * 100, '--', 'LineWidth', 1, 'Color', [0.0, 1.0, 1.0]);
 
-title('Server Utilization in M/M/S System vs Arrival Rate (\lambda)', 'Color', 'w', 'FontSize', 14);
-xlabel('Arrival Rate (\lambda)', 'Color', 'w', 'FontSize', 12);
+title('Server Utilization in M/M/S System vs Capacity (S)', 'Color', 'w', 'FontSize', 14);
+xlabel('Capacity (S)', 'Color', 'w', 'FontSize', 12);
 ylabel('Server Utilization (%)', 'Color', 'w', 'FontSize', 12);
 
 grid on;

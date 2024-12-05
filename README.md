@@ -48,16 +48,16 @@ The simulation compares the next arrival time (`next_arrival_time`) and the earl
 
 ### Simulation Parameters
 
-- **Arrival Rate (λ):** The average number of arrivals per unit time. This is an array for server utilization and loss probability statistics.
+- **Arrival Rate (λ):** The average number of arrivals per unit time.
 - **Service Rate (μ):** The average number of services completed per unit time.
-- **Number of Servers (S):** The total number of servers.
+- **Number of Servers (S):** The total number of servers. This is an array for server utilization and loss probability statistics.
 - **Total Time:** The duration of the simulation.
 
 ```matlab
-lambda_range = 0.1:0.1:20 % arrivals / unit time
-mu = 2                    % services / unit time
-S = 10                    % number of servers
-total_time = 100          % units
+lambda = 10      % arrivals / unit time
+mu = 2           % services / unit time
+S_range = 1:1:20 % number of servers
+total_time = 100 % units
 ```
 
 ---
@@ -80,7 +80,7 @@ total_time = 100          % units
    - Log the system state after each event (time and number of calls).
 4. Continue until simulation time is exceeded (`current_time >= total_time`).
 
-This process iterates until simulations are computed with all arrival rates.
+This process iterates until simulations are computed with all server capacities.
 
 ---
 
@@ -90,7 +90,7 @@ This process iterates until simulations are computed with all arrival rates.
 
 This plot tracks the evolution of the number of active calls during the simulation. The orange line represents the number of active calls at each logged event. The red dashed line shows the time-weighted average number of calls, computed across the simulation duration. The green dashed line indicates the overall maximum system capacity.
 
-_This visualization is only created for the last arrival rate (λ) value. In this case for `λ = 20`._
+_This visualization is only created for the last server capacity (S) value. In this case for `S = 20`._
 
 <div align="center">
   <img src="assets/graph1-dark.png#gh-dark-mode-only" alt="Number of Calls" style="width: 500px; height: auto; border-radius: 4px;">
@@ -101,19 +101,19 @@ _This visualization is only created for the last arrival rate (λ) value. In thi
 
 This histogram displays the probability distribution of the number of active calls during the simulation. The distribution reflects the system's overall load.
 
-_This visualization is only created for the last arrival rate (λ) value. In this case for `λ = 20`._
+_This visualization is only created for the last server capacity (S) value. In this case for `S = 20`._
 
 <div align="center">
   <img src="assets/graph2-dark.png#gh-dark-mode-only" alt="Calls Distribution" style="width: 500px; height: auto; border-radius: 4px;">
   <img src="assets/graph2-light.png#gh-light-mode-only" alt="Calls Distribution" style="width: 500px; height: auto; border-radius: 4px;">
 </div>
 
-#### Probability of Loss Across Arrival Rates and Server Utilization Across Arrival Rates
+#### Probability of Loss Across Server Capacities and Server Utilization Across Server Capacities
 
 This plot provides two separate graphs:
 
-1. **Probability of Loss Across Arrival Rates:** This plot shows the probability of call loss for different arrival rates (λ), based on fixed server count (S) and service rates (μ). The red dashed line represent the trend of simulated loss probabilities across arrival rates. The green dashed line indicates simulated system overall quality of service across arrival rates. The cyan dashed line represents theoretical loss probability across arrival rates. Orange dots are simulated loss probabilities at each arrival rate.
-2. **Server Utilization Across Arrival Rates:** This plot represents the server utilization for different arrival rates (λ), based on fixed server count (S) and service  rates (μ). The red dashed line shows the trend of simulated utilization across arrival rates. The cyan dashed line represents theoretical utilization across arrival rates. Orange dots are simulated utilizations at each arrival rate.
+1. **Probability of Loss Across Server Capacities:** This plot shows the probability of call loss for different server capacities (S), based on fixed arrival rate (λ) and service rate (μ). The red dashed line represent the trend of simulated loss probabilities across server capacities. The green dashed line indicates simulated system overall quality of service across server capacities. The cyan dashed line represents theoretical loss probability across server capacities. Orange dots are simulated loss probabilities at each server capacity.
+2. **Server Utilization Across Server Capacities:** This plot represents the server utilization for different server capacities (S), based on fixed arrival rate (λ) and service rate (μ). The red dashed line shows the trend of simulated utilization across server capacities. The cyan dashed line represents theoretical utilization across server capacities. Orange dots are simulated utilizations at each server capacity.
 
 <div align="center">
   <img src="assets/graph3-dark.png#gh-dark-mode-only" alt="Loss and Utilization" style="width: 500px; height: auto; border-radius: 4px;">
@@ -129,7 +129,7 @@ This plot provides two separate graphs:
    git clone https://github.com/mantvydasdeltuva/m_m_s-queue-simulation.git
    cd m_m_s-queue-simulation
 2. Open the MATLAB script in the MATLAB editor.
-3. Modify the parameters (`lambda_range`, `mu`, `S`, `total_time`) if needed.
+3. Modify the parameters (`lambda`, `mu`, `S_range`, `total_time`) if needed.
 4. Run the script to simulate and generate the visualizations.
 
 ---

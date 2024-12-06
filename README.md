@@ -24,7 +24,6 @@ The simulation revolves around two types of **events**:
 1. **Arrival Event:** A new call enters the system. If a server is available, the call is served. Otherwise, the call is lost. Each arrival event generates the next arrival time (`next_arrival_time`) by sampling from the exponential inter-arrival time distribution.
 2. **Departure Event:** A call completes its service and leaves the system.
 
-Each event updates the system state, including the current number of active calls (`num_calls`) and the time (`current_time`).
 Each event updates the system state, including the number of active calls (`num_calls`), number of lost calls (`num_dropped_calls`), and the time (`current_time`).
 
 ---
